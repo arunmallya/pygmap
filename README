@@ -1,0 +1,11 @@
+Usage:
+  """
+    import pygmap
+    
+    pygmap.create_map(input_file, output_file)    
+  """
+    
+    where:
+    input_file contains locations in "<latitude> <longitude>" format
+    locations.txt is such a sample file
+    output_file is where the map in HTML format will be created
