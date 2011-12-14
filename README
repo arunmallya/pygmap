@@ -9,3 +9,4 @@ Usage:
     input_file contains locations in "<latitude> <longitude>" format
     locations.txt is such a sample file
     output_file is where the map in HTML format will be created
+    eg: "pygmap.create("locations.txt", "map.html")"
