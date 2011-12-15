@@ -152,7 +152,6 @@ def print_init(fout, input_file, options):
 
 
 def create_map(input_file, output_file, options=[]):
-    print len(options)
 
     fout = open(output_file, "w")
     
