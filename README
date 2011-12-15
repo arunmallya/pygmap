@@ -2,7 +2,7 @@ Usage:
   """
     import pygmap
     
-    pygmap.create_map(input_file, output_file)    
+    pygmap.create_map(input_file, output_file, options)    
   """
     
     where:
@@ -10,3 +10,20 @@ Usage:
     locations.txt is such a sample file
     output_file is where the map in HTML format will be created
     eg: "pygmap.create("locations.txt", "map.html")"
+    
+    Options:
+    The format of options is as follows:
+    [color_info=True/False, extra_info=True/False]
+    
+    1)  If color_info is true, then an extra column is required in the input file
+        where color codes are as follows
+            0 - 00FFFF (aqua)
+            1 - 99FF00 (flourescent green)
+            2 - blue
+            3 - CC9900 (brown)
+            4 - FF00FF (pink)
+            5 - FF0000 (red)
+            6 - FF9900 (orange)
+            7 - FFFF00 (yellow)
+            
+        An example input is "locations_color.txt"    
