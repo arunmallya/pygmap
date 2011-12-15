@@ -1,21 +1,26 @@
+All example data files are in the <<sample_input_files>> folder
+
 Usage:
   """
     import pygmap
     
     pygmap.create_map(input_file, output_file, options)    
+    
   """
     
     where:
-    input_file contains locations in "<latitude> <longitude>" format
-    locations.txt is such a sample file
+    input_file contains locations in "<latitude> <longitude> <[color_info?]> <(extra_info+)?>" format
+    locations.txt is such a sample file with only the location information
     output_file is where the map in HTML format will be created
-    eg: "pygmap.create("locations.txt", "map.html")"
+    options are for color and extra information to be displayed for the point on map
+    
+    eg: "pygmap.create("locations.txt", "map.html", [False, False])"
     
     Options:
-    The format of options is as follows:
+    The format of options is as follows: (True/False are boolean values)
     [color_info=True/False, extra_info=True/False]
     
-    1)  If color_info is true, then an extra column is required in the input file
+    1)  If color_info is True, then an extra column is required in the input file
         where color codes are as follows
             0 - 00FFFF (aqua)
             1 - 99FF00 (flourescent green)
@@ -27,3 +32,9 @@ Usage:
             7 - FFFF00 (yellow)
             
         An example input is "locations_color.txt"    
+
+    2)  If extra_info is True, then all columns after the color column (if exists),
+        will be concatenated into a string and used as a message for that points
+        marker(displayed as information box upon clicking marker in map)  
+        
+        An example input is "locations_color_extrainfo.txt" and "locations_extrainfo.txt"
