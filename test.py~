@@ -1,0 +1,3 @@
+from pygmap import *
+
+create_map("./sample_input_files/locations_color_extrainfo.txt", "map.html", [True, True])

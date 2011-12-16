@@ -18,7 +18,7 @@ Usage:
     
     Options:
     The format of options is as follows: (True/False are boolean values)
-    [color_info=True/False, extra_info=True/False]
+    [color_info=True/False, extra_info=True/False, polyline=True/False]
     
     1)  If color_info is True, then an extra column is required in the input file
         where color codes are as follows
@@ -38,3 +38,6 @@ Usage:
         marker(displayed as information box upon clicking marker in map)  
         
         An example input is "locations_color_extrainfo.txt" and "locations_extrainfo.txt"
+        
+    3)  If polyline is True, then the given points will be joined by a line in the same
+        given order    

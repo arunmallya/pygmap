@@ -1,4 +1,5 @@
 import sys
+import math
 
 def print_header(fout): # prints the required <head>
     fout.write("""
@@ -31,34 +32,8 @@ def print_body(fout): # prints the required <body>
 
 # print_body() ends
 
+def print_init_header(fout, c_latitude, c_longitude):
 
-def print_init(fout, input_file, options):
-    # find the center of points in the input file
-    fin = open(input_file, "r")
-
-    c_latitude  = 0.0
-    c_longitude = 0.0
-
-    counter = 0
-    for line in fin:
-        info = line.split(" ")
-
-        latitude  = float(info[0])
-        longitude = float(info[1])
-
-        c_latitude  += latitude
-        c_longitude += longitude
-
-        counter += 1
-
-    fin.close()
-
-    c_latitude  /= counter
-    c_longitude /= counter
-
-    print c_latitude, c_longitude
-    
-    # write out the initialize() part to map part
     fout.write("""
 <script type="text/javascript">
   function initialize()
@@ -82,35 +57,10 @@ def print_init(fout, input_file, options):
 
 """ %(c_latitude, c_longitude))
 
-# write out markers for each of the points and the info containing its location
-    fin = open(input_file, "r")
-    
-    counter = 0
-    for line in fin:
-        info = line.split(" ")
+# print_init_header() ends
 
-        # here are the default values for many of the possible input parameters
-        string = "" # no additional information is default
-        color = 5 # red is default
-
-        # check which of the input parameters are used
-        if options[0] == True: # use specified color
-            color = int(info[2])
-        if options[1] == True: # has additional information
-            # if color was used, then extra info will be from info[3], else info[2]
-            if options[0] == True:
-                string = str(info[3:])
-            else:
-                string = str(info[2:])
-            string = string.replace('[', '')
-            string = string.replace(']', '')
-            string = string.replace(',', ' ')
-            string = string.replace('\'', '')
-
-        latitude  = float(info[0])
-        longitude = float(info[1])
-
-        fout.write("""
+def print_marker_and_info(fout, counter, latitude, longitude, string, color):
+    fout.write("""
     var contentString%d = '<div id="content">'+ 
     '<div id="siteNotice">'+ 
     '</div>'+ 
@@ -138,8 +88,120 @@ def print_init(fout, input_file, options):
            infoWindow%d.open(map, marker%d);
     });
 """ %(counter, latitude, longitude, string, counter, counter, counter, latitude, longitude, counter, counter, counter, color, counter, counter, counter))
+
+# def print_marker_and_info() ends
+
+def check_input_params(options, info):
+    # here are the default values for many of the possible input parameters
+    string = "" # no additional information is default
+    color = 5 # red is default
+    polyline = False # no lines by default
+
+    # check which of the input parameters are used
+    if options[0] == True: # use specified color
+        color = int(info[2])
+    if options[1] == True: # has additional information
+        # if color was used, then extra info will be from info[3], else info[2]
+        if options[0] == True:
+            string = str(info[3:])
+        else:
+            string = str(info[2:])
+        
+        string = string.replace('[', '')
+        string = string.replace(']', '')
+        string = string.replace(',', ' ')
+        string = string.replace('\'', '')
+    
+    if options[2] == True: # use polyline
+        polyline = True
+
+    return (string, color, polyline)
+
+# check_input_params() ends
+
+def find_centroid(fin):
+    c_latitude  = 0.0
+    c_longitude = 0.0
+
+    counter = 0
+    for line in fin:
+        info = line.split(" ")
+
+        latitude  = float(info[0])
+        longitude = float(info[1])
+
+        c_latitude  += latitude
+        c_longitude += longitude
+
         counter += 1
 
+    fin.close()
+
+    c_latitude  /= counter
+    c_longitude /= counter
+    
+    return (c_latitude, c_longitude)
+
+# def find_centroid() ends
+
+
+def create_polyline(fout, counter):
+    
+    fout.write("""
+    var polylineCoordinates = [""")
+
+    for i in range(0, counter):
+        if i != counter-1:
+            fout.write("""
+      myLatLang%d,""" %i)
+        else:
+            fout.write("""
+      myLatLang%d
+    ];
+
+    var myPolyLine = new google.maps.Polyline({
+      path: polylineCoordinates,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+
+    myPolyLine.setMap(map);
+
+""" %i)
+
+def print_init(fout, input_file, options):
+    # find the center of points in the input file
+    fin = open(input_file, "r")
+    c_latitude, c_longitude = find_centroid(fin)
+    print c_latitude, c_longitude
+
+    
+    # write out the initialize() part to map part
+    print_init_header(fout, c_latitude, c_longitude)
+
+
+    # write out markers for each of the points and the info containing its location
+    fin = open(input_file, "r")
+    
+    counter = 0
+    for line in fin:
+        info = line.split(" ")
+
+        # check the input parameters
+        string, color, polyline = check_input_params(options, info)
+
+        latitude  = float(info[0])
+        longitude = float(info[1])
+
+        print_marker_and_info(fout, counter, latitude, longitude, string, color)
+        
+        counter += 1
+
+
+    # insert polyline
+    if polyline == True:
+        create_polyline(fout, counter)
 
     fout.write("""
   }
@@ -159,4 +221,4 @@ def create_map(input_file, output_file, options=[]):
     print_init(fout, input_file, options)
     print_body(fout)
 
-# create_map() ends
+# def create_map_file() ends
