@@ -1,22 +1,7 @@
 import sys
 import math
 
-def print_header(fout): # prints the required <head>
-    fout.write("""
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<style type="text/css">
-  html { height: 100% }
-  body { height: 100%; margin: 0; padding: 0 }
-  #map_canvas { height: 100% }
-</style>
-<script type="text/javascript"
-    src="http://maps.googleapis.com/maps/api/js?sensor=false">
-</script>
 
-""")
 
 # print_header() ends
 
@@ -212,6 +197,10 @@ def print_init(fout, input_file, options):
 
 # print_init() ends
 
+
+def init_map(output_file): # initialize the process of creating a map
+
+    fout = open(output_file, "w")
 
 def create_map(input_file, output_file, options=[]):
 
