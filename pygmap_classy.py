@@ -37,7 +37,7 @@ class pyGmap:
   {
     var latlng = new google.maps.LatLng(22.330239, 87.323653);
     var myOptions = {
-      zoom: 1,
+      zoom: 2,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -69,6 +69,7 @@ class pyGmap:
     def end_map(self):
         self.print_init_footer()
         self.print_body()
+        self.fout.close()
 # end_map() ends
 
 

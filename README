@@ -1,26 +1,29 @@
 All example data files are in the <<sample_input_files>> folder
 
-Usage:
-  """
-    import pygmap
+Usage: See test.py for an example
+
+
+1) Initialization
+
+>>   myMap = pyGmap(output_file)   
+   
+   output_file is where the map in HTML format will be created
+  
+2) Adding points to the map
+
+>>   myMap.add_points(input_file, pointOptions)  
+   
+   input_file:
+    contains locations in "<latitude> <longitude> <[color_info?]> <(extra_info+)?>" format
+    locations_I.txt is such a sample file with only the location information
+  
     
-    pygmap.create_map(input_file, output_file, options)    
-    
-  """
-    
-    where:
-    input_file contains locations in "<latitude> <longitude> <[color_info?]> <(extra_info+)?>" format
-    locations.txt is such a sample file with only the location information
-    output_file is where the map in HTML format will be created
+   pointOptions:
     options are for color and extra information to be displayed for the point on map
-    
-    eg: "pygmap.create("locations.txt", "map.html", [False, False])"
-    
-    Options:
     The format of options is as follows: (True/False are boolean values)
     [color_info=True/False, extra_info=True/False, polyline=True/False]
     
-    1)  If color_info is True, then an extra column is required in the input file
+    i)  If color_info is True, then an extra column is required in the input file
         where color codes are as follows
             0 - 00FFFF (aqua)
             1 - 99FF00 (flourescent green)
@@ -31,13 +34,33 @@ Usage:
             6 - FF9900 (orange)
             7 - FFFF00 (yellow)
             
-        An example input is "locations_color.txt"    
+        An example input is "locations_II.txt"    
 
-    2)  If extra_info is True, then all columns after the color column (if exists),
+    ii) If extra_info is True, then all columns after the color column (if exists),
         will be concatenated into a string and used as a message for that points
         marker(displayed as information box upon clicking marker in map)  
         
         An example input is "locations_color_extrainfo.txt" and "locations_extrainfo.txt"
+    
+    eg: "myMap.add_points("./sample_input_files/locations_I.txt", [False, False])"
+        "myMap.add_points("./sample_input_files/locations_color.txt", [True, False])"        
+        "myMap.add_points("./sample_input_files/locations_extrainfo.txt", [False, True])"        
+        "myMap.add_points("./sample_input_files/locations_II_color_extrainfo.txt", [True, True])"                
         
-    3)  If polyline is True, then the given points will be joined by a line in the same
-        given order    
+        
+3) Adding polylines to the map
+
+>>   myMap.add_polyLine(input_file, pointOptions, polyLineOptions)  
+        
+   polyLineOptions:
+    [color as hex string, line opacity, line weight]     
+  
+   This adds lines between points in the order that they are in the input_file.  
+
+
+4) Termination
+
+>>   myMap.end_map()
+  
+   output_file is ready for use
+   
